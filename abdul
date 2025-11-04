@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Problem? E-sportlag</title>
+  <link rel="shortcut icon" href="image.png" type="image/x-icon" />
+  <style>
+    /* ===== Design-variabler ===== */
+    :root{
+      --bg:#0f1833;           /* Mörk bakgrund */
+      --bg-soft:#121e3f;      /* Mörkare kortbakgrund */
+      --card:#1a2b5b;         /* Kortytans färg */
+      --primary:#6e7bff;      /* Primär, blå-lila */
+      --primary-2:#9b6bff;    /* Accent */
+      --text:#f7f9ff;         /* Primär text */
+      --muted:#c9d4ff;        /* Dämpad text */
+      --ring:#9cc7ff;         /* Avatar-ring */
+      --shadow: 0 10px 30px rgba(0,0,0,.45);
+    }
+
+    /* ===== Reset / Bas ===== */
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background:
+        radial-gradient(1200px 600px at 10% 0%, rgba(110,123,255,.18), transparent 60%),
+        radial-gradient(1200px 600px at 90% 10%, rgba(155,107,255,.16), transparent 60%),
+        var(--bg);
+      color:var(--text);
+      line-height:1.6;
+    }
+
+    /* ===== Header ===== */
+    header{
+      position: sticky; top:0; z-index:50;
+      backdrop-filter: saturate(1.2) blur(8px);
+      background: linear-gradient(90deg, rgba(110,123,255,.15), rgba(155,107,255,.08));
+      border-bottom: 1px solid rgba(156,199,255,.25);
+    }
+    .container{max-width:1100px;margin:0 auto;padding:18px 20px}
+    .brand{display:flex;align-items:center;gap:14px}
+    .brand img{width:42px;height:42px}
+    .brand h1{font-size:1.45rem;letter-spacing:.4px}
+
+    /* ===== Nav ===== */
+    nav{
+      display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding:10px 20px 18px;
+      border-top:1px solid rgba(156,199,255,.18);
+      background: linear-gradient(180deg, rgba(18,30,63,.8), rgba(18,30,63,0));
+    }
+    nav a{
+      color:var(--text); text-decoration:none; font-weight:600; font-size:.95rem;
+      padding:10px 14px; border:1px solid rgba(156,199,255,.25); border-radius:999px;
+      transition:.25s transform, .25s background-color, .25s border-color;
+      background:rgba(26,43,91,.4)
+    }
+    nav a:hover{ transform:translateY(-1px); border-color:var(--ring); background:rgba(26,43,91,.7) }
+
+    /* ===== Intro / Hero ===== */
+    .hero{padding:36px 20px 8px}
+    .hero h2{font-size:2rem; color:var(--muted); font-weight:800; letter-spacing:.3px; margin-bottom:12px}
+    .lead{color:var(--text); max-width:850px; margin:0 auto; opacity:.95}
+    .pill{
+      display:inline-flex; align-items:center; gap:8px; padding:6px 12px; border-radius:999px;
+      font-size:.85rem; font-weight:700; color:var(--text);
+      background:linear-gradient(90deg, rgba(110,123,255,.22), rgba(155,107,255,.22));
+      border:1px solid rgba(156,199,255,.35);
+      box-shadow: var(--shadow);
+    }
+
+    /* ===== Grid med spelare ===== */
+    .players{padding:28px 20px 50px}
+    .grid{
+      display:grid; gap:20px; align-items:stretch;
+      grid-template-columns: repeat(12, 1fr);
+    }
+    /* Breakpoints */
+    @media (max-width: 640px){ .grid{grid-template-columns: repeat(4,1fr)} }
+    @media (min-width: 641px) and (max-width: 1024px){ .grid{grid-template-columns: repeat(8,1fr)} }
+
+    .player-card{
+      grid-column: span 12;
+      background: linear-gradient(180deg, rgba(26,43,91,.9), rgba(26,43,91,.65));
+      border:1px solid rgba(156,199,255,.22);
+      border-radius:16px; padding:20px; box-shadow: var(--shadow);
+      display:grid; grid-template-columns: 96px 1fr; gap:16px; align-items:center;
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+    @media (max-width: 640px){ .player-card{ grid-template-columns: 1fr; text-align:center } }
+    @media (min-width:641px){ .player-card{ grid-column: span 6 } }
+
+    .avatar-wrap{
+      position:relative; width:96px; height:96px; flex:0 0 auto;
+    }
+    .avatar{
+      width:100%; height:100%; object-fit:cover; border-radius:50%;
+      border:3px solid var(--ring); display:block; box-shadow: 0 6px 16px rgba(0,0,0,.45);
+      transition: transform .25s ease;
+    }
+    .player-card:hover{ transform: translateY(-4px); border-color: var(--ring); box-shadow: 0 14px 34px rgba(0,0,0,.55) }
+    .player-card:hover .avatar{ transform: scale(1.03) }
+
+    .title-row{display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+    .name{font-size:1.15rem; font-weight:800; letter-spacing:.2px}
+    .nick{color:var(--muted); font-weight:700}
+    .meta{display:flex; gap:8px; flex-wrap:wrap; margin:.35rem 0 .5rem}
+    .tag{
+      font-size:.78rem; font-weight:700; color:var(--text);
+      padding:6px 10px; border-radius:999px; border:1px solid rgba(156,199,255,.3);
+      background:rgba(15,24,51,.35)
+    }
+    .desc{color:var(--muted)}
+
+    /* ===== Footer ===== */
+    footer{
+      border-top:1px solid rgba(156,199,255,.18);
+      background: linear-gradient(180deg, rgba(18,30,63,0), rgba(18,30,63,.8));
+      padding:22px; text-align:center; color:var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <!-- Header / Brand -->
+  <header>
+    <div class="container brand">
+      <img src="image.png" alt="Problem? logotyp" />
+      <h1>Problem? E‑sportlag</h1>
+    </div>
+    <nav aria-label="Huvudmeny">
+      <a href="#start">Startsida</a>
+      <a href="#vincent">Vincent "Oliven"</a>
+      <a href="#albin">Albin "Hecate"</a>
+      <a href="#marlon">Marlon "Mallanmackan"</a>
+      <a href="#alvin">Alvin "Tackingar"</a>
+      <a href="#kian">Kian "LW44 GOAT"</a>
+      <a href="#emil">Emil "EML"</a>
+    </nav>
+  </header>
+
+  <main id="start" class="container">
+    <section class="hero">
+      <span class="pill">Valorant • League of Legends • Counter‑Strike 2</span>
+      <h2>Välkommen till Problem?</h2>
+      <p class="lead">"Problem?" är ett lag som kanske inte har de bästa förutsättningarna — men de vägrar låta det stoppa dem. Med unik talang och stark laganda siktar de på att ta turneringen med storm. Här nedanför hittar du alla sex spelare med bild och beskrivning.</p>
+    </section>
+
+    <!-- Spelargrid (6 kort) -->
+    <section class="players">
+      <div class="grid">
+        <!-- 1: Vincent -->
+        <article id="vincent" class="player-card">
+          <div class="avatar-wrap">
+            <img class="avatar" src="olivennybild.jpg" alt="Porträtt på Vincent \"Oliven\"" />
+          </div>
+          <div>
+            <div class="title-row">
+              <h3 class="name">Vincent</h3>
+              <span class="nick">“Oliven”</span>
+            </div>
+            <div class="meta">
+              <span class="tag">Valorant</span>
+              <span class="tag">Duelist</span>
+            </div>
+            <p class="desc"> Olivares är en av de bästa på marknaden när det kommer till att IGL:a. Han är en lugn och fokuserad spelare med stark motivation som dominerar tävlingarna. Med sin unika spelstil tar han motståndarna med chock och blir bättre för varje runda.</p>
+          </div>
+        </article>
+
+        <!-- 2: Albin -->
+        <article id="albin" class="player-card">
+          <div class="avatar-wrap">
+            <img class="avatar" src="hecate.jpg" alt="Porträtt på Albin \"Hecate\"" />
+          </div>
+          <div>
+            <div class="title-row">
+              <h3 class="name">Albin</h3>
+              <span class="nick">“Hecate”</span>
+            </div>
+            <div class="meta">
+              <span class="tag">League of Legends</span>
+              <span class="tag">Mid</span>
+            </div>
+            <p class="desc">Fogelström är en controller som möter sina motståndare med fart och precision. När han är i spelet finns det ingen som kan röra sig fritt.
+            </p>
+          </div>
+        </article>
+
+        <!-- 3: Marlon -->
+        <article id="marlon" class="player-card">
+          <div class="avatar-wrap">
+            <img class="avatar" src="Mallanmackan.JPG" alt="Porträtt på Marlon \"Mallanmackan\"" />
+          </div>
+          <div>
+            <div class="title-row">
+              <h3 class="name">Marlon</h3>
+              <span class="nick">“Mallanmackan”</span>
+            </div>
+            <div class="meta">
+              <span class="tag">CS2</span>
+              <span class="tag">IGL</span>
+            </div>
+            <p class="desc">Hagel är en spelare beroende av att skapa momentum och visar sitt skick genom att peppa laget, även under de tuffaste stunderna.
+            </p>
+          </div>
+        </article>
+
+        <!-- 4: Alvin -->
+        <article id="alvin" class="player-card">
+          <div class="avatar-wrap">
+            <img class="avatar" src="takingcar.jpg" alt="Porträtt på Alvin \"Tackingar\"" />
+          </div>
+          <div>
+            <div class="title-row">
+              <h3 class="name">Alvin</h3>
+              <span class="nick">“Tackingar”</span>
+            </div>
+            <div class="meta">
+              <span class="tag">Valorant</span>
+              <span class="tag">Controller</span>
+            </div>
+            <p class="desc">Emlén är en välkänd spelare i Problem?. Han är Valorants mest irriterande lurker som smälter in i väggarna och har fått smeknamnet “skräckhuset” på grund av sina plötsliga peeks från hörn som skrämmer motståndarna.
+            </p>
+          </div>
+        </article>
+
+        <!-- 5: Kian -->
+        <article id="kian" class="player-card">
+          <div class="avatar-wrap">
+            <img class="avatar" src="Lw44 goat.JPG" alt="Porträtt på Kian \"LW44 GOAT\"" />
+          </div>
+          <div>
+            <div class="title-row">
+              <h3 class="name">Kian</h3>
+              <span class="nick">“LW44 GOAT”</span>
+            </div>
+            <div class="meta">
+              <span class="tag">League of Legends</span>
+              <span class="tag">Jungle</span>
+            </div>
+            <p class="desc">Jansson är ett namn som kanske inte är känt ännu men som är på väg mot toppen. Han var tidigare känd som “Byggare Bob” i Fortnite och är nu en central spelare och en viktig grundpelare i Problem?.
+            </p>
+          </div>
+        </article>
+
+        <!-- 6: Emil -->
+        <article id="emil" class="player-card">
+          <div class="avatar-wrap">
+            <img class="avatar" src="EML.JPG" alt="Porträtt på Emil \"EML\"" />
+          </div>
+          <div>
+            <div class="title-row">
+              <h3 class="name">Emil</h3>
+              <span class="nick">“EML”</span>
+            </div>
+            <div class="meta">
+              <span class="tag">CS2</span>
+              <span class="tag">AWPer</span>
+            </div>
+            <p class="desc">Gahmberg är en demon från topp rankarna i Faceit. Han vinner nästan varje duell och är en av de viktigaste spelarna i laget.
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    &copy; 2025 Problem? E‑sportlag
+  </footer>
+</body>
+</html>
